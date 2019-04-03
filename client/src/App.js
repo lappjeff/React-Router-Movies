@@ -4,6 +4,7 @@ import SavedList from './Movies/SavedList';
 import MovieList from './Movies/MovieList';
 import Movie from './Movies/Movie';
 
+
 export default class App extends Component {
   constructor() {
     super();
@@ -14,8 +15,12 @@ export default class App extends Component {
 
   addToSavedList = movie => {
     const savedList = this.state.savedList;
-    savedList.push(movie);
-    this.setState({ savedList });
+    if (savedList.includes(movie)) {
+      return alert('This movie has already been saved!')
+    }
+      savedList.push(movie);
+      this.setState({ savedList });
+
   };
 
   render() {
@@ -23,7 +28,11 @@ export default class App extends Component {
       <div>
 
         <SavedList list={this.state.savedList} />
-        <Route exact path='/' component={MovieList}/>
+        <Route exact path='/'
+          render={props => <MovieList {...props}
+            saveMovie={this.addToSavedList} />}
+        />
+
         <Route
           path='/:movieId'
           render={(props) => <Movie {...props}
